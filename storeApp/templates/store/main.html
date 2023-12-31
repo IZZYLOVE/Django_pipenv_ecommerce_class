@@ -1,0 +1,144 @@
+
+<!-- In store/templates/store/store.html -->
+
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>Ecom</title>
+    <!-- Link to your CSS file -->
+    <!-- <link rel="stylesheet" href="{% static '../../static/css/main2.css' %}"> -->
+
+    <!-- for app level -->
+    <!-- <link rel="stylesheet" href="{% static '../../static/css/main2.css' %}"> -->
+    <!-- <link rel="stylesheet" href="../../static/css/main2.css"> -->
+    
+    <!-- for project level -->
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+    <!-- <link rel="stylesheet" href="../../static/css/main.css"> -->
+
+    <!-- <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}"> -->
+    <!-- or -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/zenager_logo.png' %}">
+    <script type="text/javascript">
+        //  usershould be available throughout each page
+        var user = '{{request.user}}'
+
+        // for X-CSRFToken from Jango docs
+        // https://docs.djangoproject.com/
+        // but i changed the function getCookie to getToken
+        function getToken(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            console.log('cookieValue', cookieValue)
+            return cookieValue;
+        }
+        const csrftoken = getToken('csrftoken');
+
+        function csrf_tokenIfNoCookie() {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                // for incognito_mood, get the csrf_token from the form
+                var form = document.getElementById('form_wrapper')
+                if(form){
+                    cookieValue = form.getElementsByTagName("input")[0].value
+                }   console.log('cookieValue2', cookieValue)
+            }
+            return cookieValue;
+        }
+
+
+
+
+        
+        function setActivePage(pageClass) {
+            console.log('setActivePage ran', pageClass);
+            var navElements = document.getElementsByClassName('nav');
+
+            // Loop through each element in the collection
+            for (var i = 0; i < navElements.length; i++) {
+                // Remove 'active' class from all elements
+                navElements[i].classList.remove('active');
+            }
+
+            // Add 'active' class to the element with the specified pageClass
+            var pageElement = document.querySelector('.' + pageClass);
+            if (pageElement) {
+                pageElement.classList.add('active');
+            }
+        }
+    </script>
+
+    <script type="text/javascript" src="{% static 'js/cart.js' %}" defer></script>
+
+</head>
+<body class="container">
+    <header>
+        <div class="logodiv">
+            <img src="{% static 'images/zenager_logo.png' %}" class="logo" alt="Logo">
+        </div>
+        <nav>
+            
+            <ul>
+                <li><a class="toStore nav " href="{% url 'store' %}">Store</a></li>
+                <li><a class="toOrders nav" href="{% url 'orders' %}">Orders</a></li>
+                <li><a class="toLogin nav" href="{% url 'login' %}">Login</a></li>
+                <li><a class="cart_icon toCart nav" href="{% url 'cart' %}" >
+                    <img src="{% static 'images/cart.svg' %}" alt="cart">
+                    <p>0</p>
+                </a></li>
+            </ul>
+        </nav>
+        <section><h1>SHOPADDY</h1></section>
+        <div class="searchbar">
+            <div class="Searchcontainer marginme">
+                <input class="searchBox" type="search" name="search" placeholder="Enter text here...">
+                <!-- <input class="searchButton" type="submit" value="search" > -->
+                <img class="icon" src="{% static 'images/magnifying-glass-tilted-left.svg' %}" >
+            </div>
+        </div>
+    </header>
+    <main>
+        {% block content %}
+
+        {% endblock content %}
+    </main>
+    <aside id="leftside"></aside>
+    <aside id="rightside"></aside>
+    <footer>
+        <div>
+            <dl>
+                <dt><strong>Help</strong></dt>
+                <dd>Customer Service, Disputes & Reports, Buyer Protection, Report IPR infringement</dd>                
+                <dt><strong>Browse by Category</strong></dt>
+                <dd>All Popular, Product, Promotion, Low Price, Great Value, Reviews, China  and Nigerian Brands</dd>
+            </dl>
+            <dl>
+                <dt><strong>ShopAddy Multi-Language Sites</strong></dt>
+                <dd>
+                    Russian, Portuguese, Spanish, French, German, Italian, Dutch, Turkish, Japanese, Korean, Thai, Vietnamese, Arabic, Hebrew, Polish
+                </dd>                
+                <dt><strong>AK Addysmart limited</strong></dt>
+                <dd>Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, rerum quasi veniam maiores tempore quos.</dd>
+            </dl>
+        </div>
+        <div class="copyright">
+            Intellectual Property Protection - Privacy Policy - Sitemap - Terms of Use - User Information Legal Enquiry Guide <br /> ©️ 2010-2023 shopAddy.com. All rights reserved.
+        </div>
+    </footer>
+
+</body>
+</html>

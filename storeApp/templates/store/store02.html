@@ -1,0 +1,23 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<section class="store">
+    {% for product in products %}
+    <div class="storeItems">
+        <!-- note the image here in src="{{product.image.url}}" is the model field 
+        but if any image url is not available, we will have an error
+        -->
+        <img class="itemsImg" src="{{product.image.url}}"  alt="product">
+        <p>{{ product.name}}</p>
+        <div>
+            <p>
+                <button>add to cart</button>
+                <a href="">view</a>
+            </p>
+                <span>${{ product.price|floatformat:2}}</span>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endblock content %}
+

@@ -1,0 +1,113 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<section class="checkout">
+    <div class="checkoutContainer">
+
+        <div class="checkoutSummary">
+            <table class="cartheader">
+                <tr>
+                    <th colspan="3" >
+                        <a href="{% url 'cart' %}">&#x2190;Back to Cart</a>
+                    </th>
+                </tr>
+                <tr >
+                    <td class="cartitemsitemtab" colspan="3"><h3><strong>ORDER SUMMARY</strong></h3></td>
+                </tr>
+
+            </table>
+
+            <table class="checkoutrows">
+                <tr class="cartitems">
+                    <th class="cartitemsimgestab"><strong>Image</strong></th>
+                    <th class="cartitemnametab"><strong>Item</strong></th>
+                    <th class="cartitemsitemtab"><strong>Price($)</strong></th>
+                    <th class="cartitemsitemtab"><strong>Qty</strong></th>
+                    <th class="cartitemsitemtab"><strong>Total</strong></th>
+                </tr>
+                {% for item in items %}
+                <tr class="cartitems">
+                    <td class="cartitemsimgestab"><img src="{{item.product.imageURL}}" class="cartImages" alt="cartimage"></td>
+                    <td class="cartitemnametab">{{item.product.name}}</td>
+                    <td class="cartitemsitemtab">{{item.product.price|floatformat:2}}</td>
+                    <td class="cartitemsitemtab">{{item.quantity}}</td>
+                    <td class="cartitemsitemtab">${{item.get_total|floatformat:2}}</td>
+                </tr>
+                {% endfor %}
+                <tr class="cartitems">
+                    <td class="cartitemsitemtab" colspan="2"><h4>Items <strong>{{order.get_cart_items}}</strong></h4></td>
+                    <td class="cartitemsitemtab" colspan="3" ><h4>Total <strong>${{order.get_cart_total|floatformat:2}}</strong></h4></td>
+                </tr>
+      
+
+            </table>
+        </div>
+
+        <div class="checkoutShip">
+            <form id="form" action="">
+                <div class="formUserInfo">
+                    <p>Customer information</p>
+                            
+                    <div class="formfield">
+                        <input type ="text" name= "fullname" placeholder="Enter full name"> <br>
+                    </div>
+
+                    <div class="formfield">
+                        <input type="email" name= "email" placeholder="Enter email"> <br>
+                    </div>
+
+                </div>
+                <div id="formShipingInfo">
+                    <p>Shiping information</p>
+                    <div class="formfield">
+                        <input type ="text" name= "country" placeholder="Enter country"> <br>
+                    </div>
+                    <div class="formfield">
+                        <input type ="text" name= "state" placeholder="Enter state"> <br>
+                    </div>
+                    <div class="formfield">
+                        <input type ="text" name= "city" placeholder="Enter city"> <br>
+                    </div>
+                    <div class="formfield">
+                        <input type ="text" name= "zipcode" placeholder="Enter Zipcode"> <br>
+                    </div>
+                    <div class="formfield">
+                        <textarea name="" id="" cols="30" rows="4" placeholder="Enter shiping address"></textarea> <br>
+                    </div>
+
+
+                </div>
+              
+                <div id="form_button" class="formfield">
+                    <input id="checkoutButton"  class="checkoutButton" type="submit" value="Contine">
+                </div>
+
+
+                <div id="payment_info" class=" hidden">
+                    payment options
+                </div>
+            </form>
+        </div>
+        
+    </div>
+
+
+</section>
+
+<script type="text/javascript">
+    var shipping = '{{order.shipping}}'
+    if (shipping == 'False'){
+        document.getElementById('formShipingInfo').innerHTML=''
+    }
+
+
+var form = document.getElementById('form')
+form.addEventListener('submit', function(e){
+    e.preventDefault()
+    console.log('Form submitted ...')
+    document.getElementById('form_button').classList.add("hidden");
+    document.getElementById('payment_info').classList.remove("hidden")
+})
+</script>
+{% endblock content %}
+

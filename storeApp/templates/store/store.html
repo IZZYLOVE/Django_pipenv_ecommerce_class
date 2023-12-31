@@ -1,0 +1,25 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<script type="text/javascript">
+    setActivePage('toStore')
+</script>
+<section class="store">
+    {% for product in products %}
+    <div class="storeItems">
+        <!-- note the image here in src="product.image.url" is the model field 
+        but if any image url is not available, we will have an error
+        -->
+        <img class="itemsImg" src="{{product.imageURL}}"  alt="product">
+        <p>{{ product.name}}</p>
+        <div>
+            <p>
+                <button data-product={{product.id}} data-action="add"  class="update_cart">add to cart</button>
+                <a href="{% url 'view' product.id %}">View</a>
+            </p>
+                <span>${{ product.price|floatformat:2}}</span>
+        </div>
+    </div>
+    {% endfor %}
+</section>
+{% endblock content %}

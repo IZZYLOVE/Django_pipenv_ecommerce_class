@@ -1,0 +1,62 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<section class="cart">
+    <div class="cartcontainer">
+        <table class="cartheader">
+            <tr>
+                <th colspan="3" >
+                    <a href="{% url 'store' %}">&#x2190;Continue shoping</a>
+                </th>
+            </tr>
+            <tr >
+                <td class="cartheadertab"><h5>Items <strong>3</strong></h5></td>
+                <td class="cartheadertab"><h5>Total <strong>3</strong></h5></td>
+                <td class="cartheadercheckouttab"><a href="{% url 'checkout' %}">Checkout</a></td>
+            </tr>
+        </table>
+        
+
+
+        <table class="cartrows">
+            <tr class="cartitems">
+                <th class="cartitemsimgestab"><strong>Image</strong></th>
+                <th class="cartitemnametab"><strong>Item</strong></th>
+                <th class="cartitemsitemtab"><strong>Price($)</strong></th>
+                <th class="cartitemsitemtab"><strong>Qty</strong></th>
+                <th class="cartitemsitemtab"><strong>Total</strong></th>
+            </tr>
+            <tr class="cartitems">
+                <td class="cartitemsimgestab"><img src="{% static 'images/desktop4.jpeg' %}" class="cartImages" alt="cartimage"></td>
+                <td class="cartitemnametab"><strong>laptop</strong></td>
+                <td class="cartitemsitemtab"><strong>300</strong></td>
+                <td class="cartitemsitemtab qty">
+                    <p>2</p>
+                    <div>
+                        <img src="{% static 'images/arrow-up.png' %}" class="qtyImages" alt="cartimage">
+                        <img src="{% static 'images/arrow-down.png' %}" class="qtyImages" alt="cartimage">
+                    </div>
+                </td>
+                <td class="cartitemsitemtab"><strong>6</strong></td>
+            </tr>
+
+            <tr class="cartitems">
+                <td class="cartitemsimgestab"><img src="{% static 'images/desktop4.jpeg' %}" class="cartImages" alt="cartimage"></td>
+                <td class="cartitemnametab"><strong>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Cumque dolores nihil nam sint ipsum quaerat ad incidunt praesentium, beatae tenetur?</strong></td>
+                <td class="cartitemsitemtab"><strong>300</strong></td>
+                <td class="cartitemsitemtab qty">
+                    <p>2</p>
+                    <div>
+                        <img src="{% static 'images/arrow-up.png' %}" class="qtyImages" alt="cartimage">
+                        <img src="{% static 'images/arrow-down.png' %}" class="qtyImages" alt="cartimage">
+                    </div>
+                </td>
+                <td class="cartitemsitemtab"><strong>6</strong></td>
+            </tr>
+        </table>
+            
+    </div>
+
+</section>
+{% endblock content %}
+

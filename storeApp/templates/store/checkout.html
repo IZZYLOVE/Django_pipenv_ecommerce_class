@@ -1,0 +1,220 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<section class="checkout">
+    <div class="checkoutContainer">
+
+        <div class="checkoutSummary">
+            <table class="cartheader">
+                <tr>
+                    <th colspan="3" >
+                        <a href="{% url 'cart' %}">&#x2190;Back to Cart</a>
+                    </th>
+                </tr>
+                <tr >
+                    <td class="cartitemsitemtab" colspan="3"><h3><strong>ORDER SUMMARY</strong></h3></td>
+                </tr>
+
+            </table>
+
+            <table class="checkoutrows">
+                <tr class="cartitems">
+                    <th class="cartitemsimgestab"><strong>Image</strong></th>
+                    <th class="cartitemnametab"><strong>Item</strong></th>
+                    <th class="cartitemsitemtab"><strong>Price($)</strong></th>
+                    <th class="cartitemsitemtab"><strong>Qty</strong></th>
+                    <th class="cartitemsitemtab"><strong>Total</strong></th>
+                </tr>
+                {% for item in items %}
+                <tr class="cartitems">
+                    <td class="cartitemsimgestab"><img src="{{item.product.imageURL}}" class="cartImages" alt="cartimage"></td>
+                    <td class="cartitemnametab">{{item.product.name}}</td>
+                    <td class="cartitemsitemtab">{{item.product.price|floatformat:2}}</td>
+                    <td class="cartitemsitemtab">{{item.quantity}}</td>
+                    <td class="cartitemsitemtab">${{item.get_total|floatformat:2}}</td>
+                </tr>
+                {% endfor %}
+                <tr class="cartitems">
+                    <td class="cartitemsitemtab" colspan="2"><h4>Items <strong>{{order.get_cart_items}}</strong></h4></td>
+                    <td class="cartitemsitemtab" colspan="3" ><h4>Total <strong>${{order.get_cart_total|floatformat:2}}</strong></h4></td>
+                </tr>
+
+            </table>
+        </div>
+
+        <div class="checkoutShip" >
+            <!-- make csrf_token the first input in the form so we can easily access it with javascript -->
+            <form id="form_wrapper" class="form_wrapper" action="">
+                {% csrf_token %}
+                <div id="formUserInfo" class="formUserInfo">
+                    <p>Customer information</p>
+                            
+                    <div class="formfield">
+                        <input type ="text" name= "name" placeholder="Enter full name"> <br>
+                    </div>
+
+                    <div class="formfield">
+                        <input type="email" name= "email" placeholder="Enter email"> <br>
+                    </div>
+
+                </div>
+                <div id="formShipingInfo">
+                    <p>Shiping information</p>
+                    <div class="formfield">
+                        <input type ="text" name= "country" placeholder="Enter country"> <br>
+                    </div>
+                    <div class="formfield">
+                        <input type ="text" name= "state" placeholder="Enter state"> <br>
+                    </div>
+                    <div class="formfield">
+                        <input type ="text" name= "city" placeholder="Enter city"> <br>
+                    </div>
+                    <div class="formfield">
+                        <input type ="text" name= "zipcode" placeholder="Enter Zipcode"> <br>
+                    </div>
+                    <div class="formfield" id="formfieldtextarea">
+                        <textarea name="" id="" cols="30" rows="4" placeholder="Enter shiping address"></textarea> <br>
+                    </div>
+
+
+                </div>
+              
+                <div id="form_button" class="formfield">
+                    <input id="checkoutButton"  class="checkoutButton" type="submit" value="Contine">
+                </div>
+
+            </form>
+
+            <div id="payment_info" class=" hidden">
+                    <small> payment options</small>
+                    <button id="make_payment">Make Payment</button>
+            </div>
+
+        </div>
+    </div>
+
+
+</section>
+
+<script type="text/javascript">
+    console.log('User', user)
+    var shipping = '{{order.shipping}}'
+    var total = '{{order.get_cart_total}}'
+    if (shipping == 'False'){
+        document.getElementById('formShipingInfo').innerHTML=''
+    }
+
+    if ( user != 'AnonymousUser'){
+        document.getElementById('formUserInfo').innerHTML=''
+    }
+
+    
+    if (shipping == 'False' && user != 'AnonymousUser'){
+        // hide the entire form if user is loggedin and shipping is false
+        document.getElementById('form_wrapper').classList.add('hidden')
+        // show payment if loggedin wants to buy an item that does not requireshipping
+        document.getElementById('payment_info').classList.remove('hidden')
+    }
+
+
+
+var form = document.getElementById('form_wrapper')
+form.addEventListener('submit', function(e){
+    e.preventDefault()
+    console.log('Form submitted ...')
+    document.getElementById('form_button').classList.add("hidden");
+    document.getElementById('payment_info').classList.remove("hidden")
+})
+
+// function submitFormData(){
+const submitFormData = async (event) => {
+    console.log('Payment button clicked')
+    var userFormData = {
+        'name': null,
+        'email': null,
+        'total': total,
+    }
+
+    var shippingInfo = {
+        'address': null,
+        'city': null,
+        'state': null,
+        'zipcode': null,
+    }
+
+    if(shipping != 'False'){
+        if(form.address){
+            shippingInfo.address= form.address.value
+        }
+        if(form.city){
+        shippingInfo.city= form.city.value 
+        }
+        if(form.state){
+        shippingInfo.state= form.state.value
+        }
+        if(form.zipcode){
+        shippingInfo.zipcode= form.zipcode.value
+        }
+    }
+
+    if(user == 'AnonymousUser'){
+        if(form.name){
+            userFormData.name= form.name.value
+        }
+        if(form.email){
+            userFormData.email= form.email.value
+        }
+    }
+
+    url = '/process_order/'
+    let csrf_token = ''
+    if (csrftoken && csrftoken !== '') {
+        console.log('csrf_token x')
+        csrf_token = csrftoken
+    }
+    else if(!csrftoken || csrftoken == '') {
+        csrf_token = csrf_tokenIfNoCookie()
+        console.log('csrf_token y', csrf_token)
+    }
+
+    console.log('csrf_token z', csrf_token)
+    console.log('userFormData', userFormData)
+
+
+    try {
+    // const response = await fetch(`${API_base_url}api/v1/users/login`, {
+        const response = await fetch(url, {
+            method: 'POST',
+            headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken':csrf_token,
+            },
+            body:JSON.stringify({'form': userFormData, 'shipping':shippingInfo})
+
+        });
+        const data = await response.json();
+        if (response.ok) {
+            console.log('data:',data)
+            alert(data)
+            let cart = {}
+            updateCookie('cart', cart)
+
+            // redirect the user
+            window.location.href = "{% url 'orders' %}"
+        } else {
+            throw Error(`${data}`)
+        }
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert(error)
+
+    }
+
+}
+document.getElementById('make_payment').addEventListener('click', function(e){
+    submitFormData()
+})
+</script>
+{% endblock content %}
+

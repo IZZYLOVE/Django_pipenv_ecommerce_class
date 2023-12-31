@@ -1,0 +1,43 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<section class="store">
+    <div class="storeItems">
+        <img class="itemsImg" src="{% static 'images/desktop4.jpeg' %}"  alt="product">
+        <p>Lorem ipsum dolor sit amet.</p>
+        <div>
+            <p>
+                <button>add to cart</button>
+                <a href="">view</a>
+            </p>
+                <span>$20</span>
+        </div>
+    </div>
+
+    <div class="storeItems">
+        <img class="itemsImg" src="{% static 'images/desktop4.jpeg' %}"  alt="product">
+        <!-- <img class="itemsImg" src="../../"  alt="product"> -->
+        <p>Lorem ipsum dolor sit amet.</p>
+        <div>
+            <p>
+                <button>add to cart</button>
+                <a href="">view</a>
+            </p>
+                <span>$20</span>
+        </div>
+    </div>
+
+    <div class="storeItems">
+        <img class="itemsImg" src="{% static 'images/desktop4.jpeg' %}"  alt="product">
+        <p>Lorem ipsum dolor sit amet.</p>
+        <div>
+        <p>
+            <button>add to cart</button>
+            <a href="">view</a>
+        </p>
+            <span>$20</span>
+         </div>
+    </div>
+</section>
+{% endblock content %}
+

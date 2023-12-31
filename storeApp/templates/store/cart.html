@@ -1,0 +1,54 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+<script type="text/javascript">
+    setActivePage('toCart')
+</script>
+<section class="cart">
+    <div class="cartcontainer">
+        <table class="cartheader">
+            <tr>
+                <th colspan="3" >
+                    <a href="{% url 'store' %}">&#x2190;Continue shoping</a>
+                </th>
+            </tr>
+            <tr >
+                <td class="cartheadertab"><h5>Items <strong>{{order.get_cart_items}}</strong></h5></td>
+                <td class="cartheadertab"><h5>Total <strong>${{order.get_cart_total|floatformat:2}}</strong></h5></td>
+                <td class="cartheadercheckouttab"><a href="{% url 'checkout' %}">Checkout</a></td>
+            </tr>
+        </table>
+        
+
+
+        <table class="cartrows">
+            <tr class="cartitems">
+                <th class="cartitemsimgestab"><strong>Image</strong></th>
+                <th class="cartitemnametab"><strong>Item</strong></th>
+                <th class="cartitemsitemtab"><strong>Price($)</strong></th>
+                <th class="cartitemsitemtab"><strong>Qty</strong></th>
+                <th class="cartitemsitemtab"><strong>Total</strong></th>
+            </tr>
+            {% for item in items %} 
+            <tr class="cartitems">
+                <td class="cartitemsimgestab"><img src="{{item.product.imageURL}}" class="cartImages" alt="cartimage"></td>
+                <td class="cartitemnametab">{{item.product.name}}</td>
+                <td class="cartitemsitemtab">{{item.product.price|floatformat:2}}</td>
+                <td class="cartitemsitemtab qty">
+                    <p>{{item.quantity}}</p>
+                    <div>
+                        <img data-product={{item.product.id}}  src="{% static 'images/arrow-up.png' %}" class="qtyImages update_cart" data-action="add" alt="cartimage">
+                        <img data-product={{item.product.id}}  src="{% static 'images/arrow-down.png' %}" class="qtyImages update_cart" data-action="remove" alt="cartimage">
+                    </div>
+                </td>
+                <td class="cartitemsitemtab">${{item.get_total|floatformat:2}}</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+            
+    </div>
+
+</section>
+{% endblock content %}
+
